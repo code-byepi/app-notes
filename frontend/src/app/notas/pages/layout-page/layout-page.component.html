@@ -1,0 +1,60 @@
+<p-toolbar>
+  <!-- Logo & inputSwitch theme -->
+  <div class="toolbar-row">
+    <a class="logo" routerLink="/">
+      <img src="assets/logo.png" alt="logo">
+      <h1>NoteTime</h1>
+    </a>
+    <div class="controls">
+      <p-inputSwitch [(ngModel)]="checked" (click)="onThemeChange('dark' ? 'light' : 'dark')" id="theme-switch"></p-inputSwitch>
+    </div>
+  </div>
+  <!-- Redes & button logout -->
+  <div class="toolbar-row">
+    <div class="social">
+      <div class="social-link">
+        <a target="_blank" rel="noopener noreferrer">
+          <i class="pi pi-github"></i>
+        </a>
+        <a target="_blank" rel="noopener noreferrer">
+          <i class="pi pi-linkedin"></i>
+        </a>
+        <a target="_blank" rel="noopener noreferrer">
+          <i class="pi pi-twitter"></i>
+        </a>
+      </div>
+    </div>
+    <div class="follow">
+      <p-button *ngIf="isButtonVisible" (click)="showDialog()" label="Cerrar Sesión" [raised]="true"></p-button>
+    </div>
+  </div>
+  <!-- items de router -->
+  <div class="toolbar-row">
+    <div class="series" *ngFor="let item of items">
+      <a [routerLink]="item.url">
+        <i class="pi" [ngClass]="item.icon"></i>
+        {{ item.label }}
+      </a>
+    </div>
+  </div>
+</p-toolbar>
+
+<!-- dialog logout - log in  -->
+<p-dialog [(visible)]="visible" [style]="{width: '27vw'}">
+  <div class="logo-wrapper">
+    <img class="logo" src="/assets/logo.png" alt="">
+  </div>
+  <h3>Hey, 👋 regístrate o inicia sesión para interactuar</h3>
+  <a class="button" (click)="onLogout()" target="_blank" rel="noopener noreferrer">
+    <img src="/assets/logo.png" alt="Sign in">
+    Inicia Sesión en NoteTime
+  </a>
+  <p>This blog is powered by <a class="link" href="https://github.com/code-byepi" target="_blank" rel="noopener noreferrer">Code_byepi</a>. To interact with the content on this blog, please log in.</p>
+</p-dialog>
+
+<!-- body -->
+<div class="container p-2">
+
+  <router-outlet></router-outlet>
+
+</div>
