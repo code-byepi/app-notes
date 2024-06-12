@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Note } from "../../../interface/note.interface";
 import { NoteService } from "../../services/note.service";
-import {AuthService} from "../../../auth/services/auth.service";
+import { AuthService } from "../../../auth/services/auth.service";
 
 @Component({
   selector: 'app-list-page',
@@ -10,8 +10,10 @@ import {AuthService} from "../../../auth/services/auth.service";
 export class ListPageComponent implements OnInit {
 
   notas: Note[] = [];
+  notasFiltradas: Note[] = [];
+  filtroCategoria: string = '';
   notasArchivadas: Note[] = [];
-  
+
   constructor(private noteService: NoteService) { }
 
   ngOnInit(): void {
@@ -23,11 +25,25 @@ export class ListPageComponent implements OnInit {
     this.noteService.getAllNotes().subscribe(
       (data: Note[]) => {
         this.notas = data.filter(nota => !nota.archivado);
+        this.filtrarPorCategoria();
       },
       error => {
         console.log('Error al obtener las notas:', error);
       }
     );
+  }
+
+  filtrarPorCategoria() {
+    if (this.filtroCategoria.trim() === '') {
+      this.notasFiltradas = this.notas;
+    } else {
+      this.notasFiltradas = this.notas.filter(nota => {
+        return nota.categorias && nota.categorias.some(categoria =>
+          categoria.nombre &&
+          categoria.nombre.toLowerCase().includes(this.filtroCategoria.toLowerCase())
+        );
+      });
+    }
   }
 
   eliminarNota(id: number) {
@@ -36,6 +52,7 @@ export class ListPageComponent implements OnInit {
         () => {
           // Eliminar la nota del array local después de eliminarla en el servidor
           this.notas = this.notas.filter(nota => nota.noteId !== id);
+          this.filtrarPorCategoria();
         },
         error => {
           console.log('Error al eliminar la nota:', error);
@@ -45,7 +62,12 @@ export class ListPageComponent implements OnInit {
   }
 
   getArchivedNotes() {
-    this.noteService.getArchivedNotes().subscribe(notas => this.notasArchivadas = notas);
+    this.noteService.getArchivedNotes().subscribe(
+      notas => this.notasArchivadas = notas,
+      error => {
+        console.log('Error al obtener las notas archivadas:', error);
+      }
+    );
   }
 
   archiveNote(event: { id: number; archivar: boolean }) {
@@ -58,16 +80,12 @@ export class ListPageComponent implements OnInit {
           this.notasArchivadas = this.notasArchivadas.filter(n => n.noteId !== event.id);
           this.notas.push(notaActualizada);
         }
+        this.filtrarPorCategoria();
       },
       error => {
         console.error('Error al archivar/desarchivar la nota:', error);
       }
     );
   }
-
-
-
-
-
 
 }

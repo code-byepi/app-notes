@@ -18,10 +18,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  register(user: User): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register/user`, user).pipe(
-      catchError(this.handleError('register', []))
-    );
+  register(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/register/user`, { email, password });
   }
 
   login(email: string, password: string): Observable<JwtResponse> {

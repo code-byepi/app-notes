@@ -1,1 +1,45 @@
-<p>register-page works!</p>
+<div class="register-container p-grid p-justify-center p-align-center">
+  <div class="p-col-12 p-md-6 p-lg-4">
+    <p-card header="Registro" class="register-card">
+
+      <form #registerForm="ngForm" (ngSubmit)="register(registerForm)" class="register-form">
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="p-field p-col-12">
+            <label for="email">Email</label>
+            <input pInputText id="email" type="email" name="email" required ngModel #emailField="ngModel" class="input-field" />
+            <small class="p-error" *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
+              Email es requerido.
+            </small>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="password">Contraseña</label>
+            <input pPassword id="password" name="password" required ngModel #passwordField="ngModel" class="input-field" />
+            <small class="p-error" *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)">
+              Contraseña es requerida.
+            </small>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="confirmPassword">Confirmar Contraseña</label>
+            <input pPassword id="confirmPassword" name="confirmPassword" required ngModel #confirmPasswordField="ngModel" class="input-field" />
+            <small class="p-error" *ngIf="confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)">
+              Confirmación de contraseña es requerida.
+            </small>
+            <small class="p-error" *ngIf="!passwordsMatch(passwordField.value, confirmPasswordField.value) && (confirmPasswordField.dirty || confirmPasswordField.touched)">
+              Las contraseñas no coinciden.
+            </small>
+          </div>
+        </div>
+
+        <div class="p-grid p-justify-center">
+          <button pButton type="submit" label="Crear cuenta" [disabled]="registerForm.invalid || !passwordsMatch(passwordField.value, confirmPasswordField.value)" class="register-button"></button>
+        </div>
+      </form>
+
+      <div class="p-mt-3 text-center">
+        <a routerLink="/auth/login">¿Ya tienes cuenta?</a>
+      </div>
+    </p-card>
+  </div>
+</div>

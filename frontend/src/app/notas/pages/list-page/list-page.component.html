@@ -1,8 +1,13 @@
 <h1>Listado de Notas</h1>
 
-<div class="grid bm-8 pt-2" >
-  <div *ngFor="let nota of notas"
-       class="grid bm-8" class="col-12 sm:col-4 md:col-4 xl:col-3">
-    <app-card [nota]="nota" (eliminarNota)="eliminarNota($event)" (archivarNota)="archiveNote($event)"></app-card>
+<div class="grid bm-8 pt-2">
+  <input type="text" [(ngModel)]="filtroCategoria" (input)="filtrarPorCategoria()"
+         placeholder="Filtrar por categoría" class="col-12 mb-4">
+
+  <div *ngFor="let nota of notasFiltradas" class="col-12 sm:col-4 md:col-4 xl:col-3">
+    <app-card [nota]="nota"
+              (eliminarNota)="eliminarNota($event)"
+              (archivarNota)="archiveNote($event)">
+    </app-card>
   </div>
 </div>

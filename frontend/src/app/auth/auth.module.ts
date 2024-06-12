@@ -14,6 +14,8 @@ import {StyleClassModule} from 'primeng/styleclass';
 import {Ripple} from "primeng/ripple";
 import {InputTextModule} from "primeng/inputtext";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MessageModule} from "primeng/message";
+import {MessageService} from "primeng/api";
 
 
 @NgModule({
@@ -22,20 +24,22 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     LoginPageComponent,
     RegisterPageComponent
   ],
-    imports: [
-        CommonModule,
-        AuthRoutingModule,
-        DividerModule,
-        ToastModule,
-        CardModule,
-        Button,
-        StyleClassModule,
-        CheckboxModule,
-        Ripple,
-        ButtonDirective,
-        InputTextModule,
-        FormsModule,
-        ReactiveFormsModule
-    ]
+  imports: [
+    CommonModule,
+    AuthRoutingModule,
+    DividerModule,
+    ToastModule,
+    CardModule,
+    Button,
+    StyleClassModule,
+    CheckboxModule,
+    Ripple,
+    ButtonDirective,
+    InputTextModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MessageModule
+
+  ]
 })
 export class AuthModule { }
