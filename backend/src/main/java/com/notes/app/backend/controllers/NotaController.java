@@ -95,7 +95,7 @@ public class NotaController {
                 nota.setArchivado(!nota.isArchivado());
                 return ResponseEntity.ok(notaService.guardarNota(nota));
             } else {
-                nota.setContenido("No tienes permiso para modificar esta nota"); // o agregar un nuevo campo para el mensaje de error
+                nota.setContenido("No tienes permiso para modificar esta nota");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(nota);
             }
         } else {
@@ -112,7 +112,7 @@ public class NotaController {
         if (notaOptional.isPresent()) {
             Nota nota = notaOptional.get();
             if (nota.getUser().getEmail().equals(emailUsuario)) {
-                nota.setArchivado(!nota.isArchivado()); // Invierte el valor de archivado
+                nota.setArchivado(!nota.isArchivado());
                 return ResponseEntity.ok(notaService.guardarNota(nota));
             } else {
                 nota.setContenido("No tienes permiso para modificar esta nota");
@@ -130,7 +130,7 @@ public class NotaController {
         Usuario usuario = usuarioService.getUserByEmail(emailUsuario);
 
         if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // Usuario no encontrado
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
         List<Nota> notasArchivadas = notaService.obtenerNotasArchivadasPorUsuario(usuario.getUserId());

@@ -5,6 +5,7 @@ import { Observable, of } from "rxjs";
 import { User } from "../../interface/user.interface";
 import { JwtResponse } from '../../interface/jwt-response.interface';
 import {jwtDecode} from "jwt-decode";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 
 @Injectable({
@@ -34,8 +35,27 @@ export class AuthService {
     );
   }
 
-  logout() {
-    this.user = undefined;
+  checkAuthentication(): Observable<boolean> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return of(false); // No hay token, no autenticado
+    }
+
+    return this.http.get<any>(`${this.baseUrl}/api/currentuser`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).pipe(
+      map(() => true),
+      catchError(error => {
+        console.error('Error al verificar la autenticación:', error);
+        localStorage.removeItem('token');
+        return of(false);
+      })
+    )
+  }
+
+  logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
   }

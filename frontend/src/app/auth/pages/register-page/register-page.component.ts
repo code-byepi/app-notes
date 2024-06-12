@@ -16,13 +16,13 @@ export class RegisterPageComponent  implements OnInit  {
   //temas
   themeService: ThemeService = inject(ThemeService);
   selectedTheme: string = 'dark';
+  registerForm: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.themeService.setTheme(this.selectedTheme);
   }
-
 
   register(registerForm: NgForm) {
     if (registerForm.invalid) {

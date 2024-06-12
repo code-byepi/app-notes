@@ -2,6 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import {ThemeService} from "../../../services/theme.service";
 import {Router} from "@angular/router";
+import {AuthService} from "../../../auth/services/auth.service";
 
 @Component({
   selector: 'app-layout-page',
@@ -15,7 +16,7 @@ export class LayoutPageComponent implements OnInit {
   visible: boolean = false;
   isButtonVisible: boolean = true;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService,) {
   }
 
   public items = [
@@ -40,6 +41,7 @@ export class LayoutPageComponent implements OnInit {
   }
 
   onLogout() {
-    this.router.navigate(['/auth/login'])
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
   }
 }

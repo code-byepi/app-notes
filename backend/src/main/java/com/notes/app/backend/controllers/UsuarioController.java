@@ -49,11 +49,11 @@ public class UsuarioController {
 
     // método verificar las credenciales proporcionadas por el usuario, sies correcta generar un token JWT
     @PostMapping(path = "/login/user", consumes = { "application/json" })
-    public ResponseEntity<?> checkCredentials(@RequestBody JwtRequest jwtRequest) { // ResponseEntity<?> para permitir diferentes tipos de respuesta
+    public ResponseEntity<?> checkCredentials(@RequestBody JwtRequest jwtRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(jwtRequest.getEmail(), jwtRequest.getPassword()));
-        } catch (BadCredentialsException e) { // Capturar la excepción específica
+        } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class UsuarioController {
 
         Usuario userDetails = customUserDetailService.loadUserByUsername(jwtRequest.getEmail());
         String token = jwtUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token)); // Devolver el token con estado 200 si la autenticación es exitosa
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
 
