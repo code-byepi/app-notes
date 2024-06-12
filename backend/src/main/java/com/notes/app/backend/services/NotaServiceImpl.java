@@ -5,13 +5,14 @@ import com.notes.app.backend.entities.Nota;
 import com.notes.app.backend.entities.Usuario;
 import com.notes.app.backend.repositories.NotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.notes.app.backend.auth.JwtUtils.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NotaServiceImpl implements NotaService{
@@ -20,6 +21,9 @@ public class NotaServiceImpl implements NotaService{
     private NotaRepository notesDao;
     @Autowired
     private UsuarioService usersService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Override
     public boolean addNote(Nota note) {
@@ -38,9 +42,16 @@ public class NotaServiceImpl implements NotaService{
     }
 
     @Override
-    public List<Nota> getTop10ByUserId(long userId) {
-        List<Nota> list = notesDao.findTop10ByUserIdOrderByCreationTimeDesc(userId);
-        return list;
+    public List<Nota> getTop10ByUserId(long userId, String token) {
+
+        Long userIdFromToken = jwtUtils.extractId(token);
+
+        // Verificar si el ID del usuario en el token coincide con el ID proporcionado
+        if (!userIdFromToken.equals(userId)) {
+            throw new AccessDeniedException("No tienes permiso para acceder a estas notas");
+        }
+
+        return notesDao.findTop10ByUserIdOrderByCreationTimeDesc(userId);
     }
 
     @Override
@@ -58,6 +69,20 @@ public class NotaServiceImpl implements NotaService{
     @Override
     public Nota guardarNota(Nota nota) {
         return notesDao.save(nota);
+    }
+
+    @Override
+    public List<Nota> listarPorIdsYUsuario(List<Long> ids, String emailUsuario) {
+        Usuario usuario = usersService.getUserByEmail(emailUsuario);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado");
+        }
+
+        List<Nota> notas = notesDao.findAllById(ids);
+        // Filtrar las notas que pertenecen al usuario
+        return notas.stream()
+                .filter(nota -> nota.getUser().equals(usuario))
+                .collect(Collectors.toList());
     }
 }
 

@@ -7,9 +7,11 @@ import com.notes.app.backend.repositories.CategReposity;
 import com.notes.app.backend.services.CategoriaService;
 import com.notes.app.backend.services.NotaService;
 import com.notes.app.backend.services.UsuarioService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +26,6 @@ public class NotaController {
     private NotaService notaService;
     @Autowired
     private UsuarioService usuarioService;
-    @Autowired
-    private CategoriaService categoriaService;
     @Autowired
     private CategReposity categReposity;
 
@@ -49,22 +49,12 @@ public class NotaController {
         return ResponseEntity.ok("Se añadió la nota de forma exitosa!");
     }
 
-    // localhost:8080/notes/id/{id}
-    @GetMapping("notes/id/{id}")
-    public List<Nota> getNotesByUserId(@PathVariable("id") Long userId) {
-        return notaService.getTop10ByUserId(userId);
-    }
-
     // localhost:8080/notes
     @GetMapping(path = "/notes")
     public List<Nota> allNotes() {
         return notaService.getAllNotes();
     }
 
-    /*@DeleteMapping("/notes/{id}")
-    public void deleteNoteByNoteId(@PathVariable("id") Long noteId) {
-        notaService.deletebyNoteId(noteId);
-    }*/
     @DeleteMapping("delete-notes/{id}")
     public ResponseEntity<?> deleteNoteById(@PathVariable Long id){
         notaService.eliminarNotaDeUsuarioPorId(id);
@@ -89,6 +79,23 @@ public class NotaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/mis-notas")
+    public ResponseEntity<?> obtenerMisNotas(Principal principal) {
+        String emailUsuario = principal.getName();
+        Usuario usuario = usuarioService.getUserByEmail(emailUsuario);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado");
+        }
+
+        List<Nota> notas = notaService.getNotesByUserId(usuario.getUserId());
+
+        if (notas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(notas);
+    }
+
 
     private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();

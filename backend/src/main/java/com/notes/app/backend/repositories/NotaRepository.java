@@ -26,4 +26,6 @@ public interface NotaRepository extends JpaRepository<Nota, Long> {
     @Modifying
     @Query("delete from Nota cu where cu.noteId=?1")
     void deleteNotaUsuarioPorId(Long id);
+
+
 }

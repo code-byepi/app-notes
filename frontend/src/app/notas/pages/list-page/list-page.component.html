@@ -1,1 +1,8 @@
-<p>list-page works!</p>
+<h1>Listado de Notas</h1>
+
+<div class="grid bm-8 pt-2" >
+  <div *ngFor="let nota of notas"
+       class="grid bm-8" class="col-12 sm:col-4 md:col-4 xl:col-3">
+    <app-card [nota]="nota"></app-card>
+  </div>
+</div>

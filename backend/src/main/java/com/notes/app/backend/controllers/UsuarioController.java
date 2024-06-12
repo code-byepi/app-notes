@@ -5,10 +5,13 @@ import com.notes.app.backend.entities.Usuario;
 import com.notes.app.backend.entities.auth.JwtRequest;
 import com.notes.app.backend.entities.auth.JwtResponse;
 import com.notes.app.backend.services.CustomUserDetailService;
+import com.notes.app.backend.services.NotaService;
 import com.notes.app.backend.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -29,6 +32,9 @@ public class UsuarioController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private NotaService notaService;
+
+    @Autowired
     private CustomUserDetailService customUserDetailService;
     @Autowired
     private JwtUtils jwtUtils;
@@ -43,21 +49,22 @@ public class UsuarioController {
 
     // método verificar las credenciales proporcionadas por el usuario, sies correcta generar un token JWT
     @PostMapping(path = "/login/user", consumes = { "application/json" })
-    public JwtResponse checkCredentials(@RequestBody JwtRequest jwtRequest) { // desealizar el cuerpo de la respuesta en un objeto JwtRequest
+    public ResponseEntity<?> checkCredentials(@RequestBody JwtRequest jwtRequest) { // ResponseEntity<?> para permitir diferentes tipos de respuesta
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(jwtRequest.getEmail(), jwtRequest.getPassword()));
+        } catch (BadCredentialsException e) { // Capturar la excepción específica
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         } catch (Exception e) {
             e.printStackTrace();
-            return new JwtResponse("Bad Credentials");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el servidor");
         }
-        // cargo detalle del usuario por email
+
         Usuario userDetails = customUserDetailService.loadUserByUsername(jwtRequest.getEmail());
-        System.out.println(userDetails.getPassword()); // borrar, solo control
-        // genero el token basado en los detalles del usuario
         String token = jwtUtils.generateToken(userDetails);
-        return new JwtResponse(token);
+        return ResponseEntity.ok(new JwtResponse(token)); // Devolver el token con estado 200 si la autenticación es exitosa
     }
+
 
     @GetMapping(path = "/users")
     public List<Usuario> allUsers() {
@@ -76,5 +83,7 @@ public class UsuarioController {
         });
         return ResponseEntity.badRequest().body(errores);
     }
+
+
 
 }

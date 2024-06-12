@@ -35,7 +35,6 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers("/api/generate-token", "/register/user", "/login/user").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/notes/{id}").authenticated()
-                        .requestMatchers(HttpMethod.GET, "notes/id/{id}").authenticated()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

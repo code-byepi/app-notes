@@ -12,7 +12,7 @@ public interface NotaService {
 
     List<Nota> getNotesByUserId(long userId);
 
-    public List<Nota> getTop10ByUserId(long userId);
+    public List<Nota> getTop10ByUserId(long userId, String token);
 
     void eliminarNotaDeUsuarioPorId(Long id);
 
@@ -20,4 +20,5 @@ public interface NotaService {
 
     Optional<Nota> findById(Long id);
 
+    List<Nota> listarPorIdsYUsuario(List<Long> ids, String emailUsuario);
 }

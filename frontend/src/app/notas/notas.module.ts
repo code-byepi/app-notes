@@ -11,6 +11,8 @@ import {ButtonModule} from "primeng/button";
 import { InputSwitchModule } from 'primeng/inputswitch';
 import {InputTextModule} from "primeng/inputtext";
 import {DialogModule} from "primeng/dialog";
+import {CardModule} from "primeng/card";
+import { CardComponent } from './card/card.component';
 
 
 @NgModule({
@@ -18,19 +20,21 @@ import {DialogModule} from "primeng/dialog";
     LayoutPageComponent,
     ListPageComponent,
     NewPageComponent,
-    NotePageComponent
+    NotePageComponent,
+    CardComponent
   ],
-  imports: [
-    CommonModule,
-    NotasRoutingModule,
-    ReactiveFormsModule,
-    ToolbarModule,
-    ButtonModule,
-    InputSwitchModule,
-    FormsModule,
-    InputTextModule,
-    DialogModule,
-  ]
+    imports: [
+        CommonModule,
+        NotasRoutingModule,
+        ReactiveFormsModule,
+        ToolbarModule,
+        ButtonModule,
+        InputSwitchModule,
+        FormsModule,
+        InputTextModule,
+        DialogModule,
+        CardModule,
+    ]
 })
 export class NotasModule {
 

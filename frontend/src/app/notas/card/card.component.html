@@ -1,0 +1,13 @@
+
+<p-card header="{{ nota.titulo }}" subheader="Archivada: {{ nota.archivado ? 'Sí' : 'No' }}"
+        [style]="{ width: '100%' }" styleClass="shadow-2">
+
+  <p>{{ nota.contenido }}</p>
+
+  <ng-template pTemplate="footer">
+    <p class="card-text">Creada en: {{ nota.creationTime | date: 'medium' }}</p>
+    <p-button label="Editar" icon="pi pi-pencil" ></p-button>
+    <p-button label="Archivar" icon="pi pi-inbox" styleClass="p-button-secondary"></p-button>
+  </ng-template>
+
+</p-card>

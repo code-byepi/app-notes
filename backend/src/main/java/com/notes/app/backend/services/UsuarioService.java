@@ -1,4 +1,5 @@
 package com.notes.app.backend.services;
+import com.notes.app.backend.entities.Nota;
 import com.notes.app.backend.entities.Usuario;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface UsuarioService {
 
     public Usuario getUserByEmailAndPassword(String email, String password);
 
-
+    List<Nota> listarPorIds(Iterable<Long> ids);
 }

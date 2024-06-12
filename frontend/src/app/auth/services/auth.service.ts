@@ -1,44 +1,52 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import {catchError, map, tap} from "rxjs/operators";
+import { catchError, map, tap } from "rxjs/operators";
 import { Observable, of } from "rxjs";
-import { User } from "../interface/user.interface";
+import { User } from "../../interface/user.interface";
+import { JwtResponse } from '../../interface/jwt-response.interface';
+import {jwtDecode} from "jwt-decode";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private user?: User;
+  user?: User;
+
   private baseUrl: string = "http://localhost:8080";
 
   constructor(private http: HttpClient) { }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/api/usuarios`, { email, password }).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.token); // Almacena el token JWT en el localStorage
-      })
+  register(user: User): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register/user`, user).pipe(
+      catchError(this.handleError('register', []))
     );
   }
 
-  checkAuthentication(): Observable<boolean> {
-    const token = localStorage.getItem('token');
-    if (!token) return of(false);
+  login(email: string, password: string): Observable<JwtResponse> {
+    return this.http.post<JwtResponse>(`${this.baseUrl}/login/user`, { email, password }).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.token);
 
-    // Verificar la autenticación usando el token JWT
-    return this.http.get<User>(`${this.baseUrl}/usuario`).pipe(
-      tap(user => this.user = user),
-      map(user => !!user),
-      catchError(() => {
-        this.logout(); // Limpiar el almacenamiento local en caso de error de autenticación
-        return of(false);
+        const decodedToken = JSON.parse(atob(response.token.split('.')[1]));
+        const userId = decodedToken.id;
+        localStorage.setItem('userId', userId.toString());
       })
     );
   }
 
   logout() {
     this.user = undefined;
-    localStorage.removeItem('token'); // Elimina el token del localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+  }
+
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
   }
 }

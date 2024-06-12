@@ -13,7 +13,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import {StyleClassModule} from 'primeng/styleclass';
 import {Ripple} from "primeng/ripple";
 import {InputTextModule} from "primeng/inputtext";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -22,19 +22,20 @@ import {FormsModule} from "@angular/forms";
     LoginPageComponent,
     RegisterPageComponent
   ],
-  imports: [
-    CommonModule,
-    AuthRoutingModule,
-    DividerModule,
-    ToastModule,
-    CardModule,
-    Button,
-    StyleClassModule,
-    CheckboxModule,
-    Ripple,
-    ButtonDirective,
-    InputTextModule,
-    FormsModule
-  ]
+    imports: [
+        CommonModule,
+        AuthRoutingModule,
+        DividerModule,
+        ToastModule,
+        CardModule,
+        Button,
+        StyleClassModule,
+        CheckboxModule,
+        Ripple,
+        ButtonDirective,
+        InputTextModule,
+        FormsModule,
+        ReactiveFormsModule
+    ]
 })
 export class AuthModule { }
