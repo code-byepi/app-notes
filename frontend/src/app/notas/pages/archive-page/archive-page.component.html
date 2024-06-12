@@ -2,6 +2,6 @@
 
 <div class="grid bm-8 pt-2">
   <div *ngFor="let nota of notasArchivadas" class="grid bm-8" class="col-12 sm:col-4 md:col-4 xl:col-3">
-    <app-card [nota]="nota"></app-card>
+    <app-card [nota]="nota" (archivarNota)="desarchivarNota($event)"></app-card>
   </div>
 </div>

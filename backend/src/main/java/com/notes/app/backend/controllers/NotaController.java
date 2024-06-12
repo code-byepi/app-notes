@@ -61,6 +61,23 @@ public class NotaController {
         return notaService.getAllNotes();
     }
 
+    // notas por usuario
+    @GetMapping("/mis-notas")
+    public ResponseEntity<?> obtenerMisNotas(Principal principal) {
+        String emailUsuario = principal.getName();
+        Usuario usuario = usuarioService.getUserByEmail(emailUsuario);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado");
+        }
+
+        List<Nota> notas = notaService.getNotesByUserId(usuario.getUserId());
+
+        if (notas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(notas);
+    }
+
     @DeleteMapping("delete-notes/{id}")
     public ResponseEntity<?> deleteNoteById(@PathVariable Long id){
         notaService.eliminarNotaDeUsuarioPorId(id);
@@ -86,22 +103,27 @@ public class NotaController {
         }
     }
 
-    @GetMapping("/mis-notas")
-    public ResponseEntity<?> obtenerMisNotas(Principal principal) {
+    // no la uso en el frontend
+    @PutMapping("/notes/{id}/desarchivar")
+    public ResponseEntity<Nota> desarchivarNota(@PathVariable Long id, Principal principal) {
         String emailUsuario = principal.getName();
-        Usuario usuario = usuarioService.getUserByEmail(emailUsuario);
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado");
-        }
+        Optional<Nota> notaOptional = notaService.findById(id);
 
-        List<Nota> notas = notaService.getNotesByUserId(usuario.getUserId());
-
-        if (notas.isEmpty()) {
-            return ResponseEntity.noContent().build();
+        if (notaOptional.isPresent()) {
+            Nota nota = notaOptional.get();
+            if (nota.getUser().getEmail().equals(emailUsuario)) {
+                nota.setArchivado(!nota.isArchivado()); // Invierte el valor de archivado
+                return ResponseEntity.ok(notaService.guardarNota(nota));
+            } else {
+                nota.setContenido("No tienes permiso para modificar esta nota");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(nota);
+            }
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(notas);
     }
 
+    // Notas archivadas del usuario
     @GetMapping("/notas-archivadas")
     public ResponseEntity<List<Nota>> obtenerNotasArchivadas(Principal principal) {
         String emailUsuario = principal.getName();

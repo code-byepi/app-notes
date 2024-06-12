@@ -30,4 +30,17 @@ export class ArchivePageComponent implements OnInit {
   }
 
 
+  desarchivarNota(event: { id: number; archivar: boolean }) {
+    this.noteService.archiveNoteById(event.id, event.archivar).subscribe(
+      notaActualizada => {
+        // Filtrar la nota desarchivada de la lista
+        this.notasArchivadas = this.notasArchivadas.filter(n => n.noteId !== event.id);
+      },
+      error => {
+        console.error('Error al desarchivar la nota:', error);
+      }
+    );
+  }
+
+
 }

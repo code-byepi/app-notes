@@ -40,7 +40,7 @@
 </p-toolbar>
 
 <!-- dialog logout - log in  -->
-<p-dialog [(visible)]="visible" [style]="{width: '27vw'}">
+<p-dialog [(visible)]="visible" [modal]="false" [style]="{ width: '27vw', 'z-index': 10001 }" (onShow)="showDialog()">
   <div class="logo-wrapper">
     <img class="logo" src="/assets/logo.png" alt="">
   </div>

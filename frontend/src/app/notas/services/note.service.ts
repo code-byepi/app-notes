@@ -39,9 +39,15 @@ export class NoteService {
     });
   }
 
-  archiveNoteById(id: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/notes/${id}/archivar`, {});
+  archiveNoteById(id: number, archivar: boolean): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.put(`${this.baseUrl}/notes/${id}/archivar`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
   }
+
 
   getArchivedNotes(): Observable<Note[]> {
     const token = localStorage.getItem('token');

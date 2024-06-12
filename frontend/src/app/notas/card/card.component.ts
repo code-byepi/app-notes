@@ -13,7 +13,8 @@ export class CardComponent implements OnInit{
   @Output()
   eliminarNota = new EventEmitter<number>();
 
-  @Output() archivarNota: EventEmitter<number> = new EventEmitter<number>();
+  @Output() archivarNota = new EventEmitter<{ id: number; archivar: boolean }>();
+
 
   constructor() { }
 
@@ -26,9 +27,10 @@ export class CardComponent implements OnInit{
     this.eliminarNota.emit(id);
   }
 
-  archivar(id: number | undefined) {
-    this.archivarNota.emit(id);
+  archivar(id: number | undefined, archivar: boolean) {
+    this.archivarNota.emit({ id: id!, archivar }); // Emitir un objeto con id y archivar
   }
+
 
 
 }

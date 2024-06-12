@@ -10,17 +10,19 @@ import {AuthService} from "../../../auth/services/auth.service";
 export class ListPageComponent implements OnInit {
 
   notas: Note[] = [];
-
+  notasArchivadas: Note[] = [];
+  
   constructor(private noteService: NoteService) { }
 
   ngOnInit(): void {
     this.getNotes();
+    this.getArchivedNotes();
   }
 
   getNotes() {
     this.noteService.getAllNotes().subscribe(
       (data: Note[]) => {
-        this.notas = data;
+        this.notas = data.filter(nota => !nota.archivado);
       },
       error => {
         console.log('Error al obtener las notas:', error);
@@ -42,11 +44,30 @@ export class ListPageComponent implements OnInit {
     }
   }
 
-  archiveNote(id: number) {
-    this.noteService.archiveNoteById(id).subscribe(() => {
-      this.getNotes();
-    }, error => {
-      console.error('Error al archivar la nota:', error);
-    });
+  getArchivedNotes() {
+    this.noteService.getArchivedNotes().subscribe(notas => this.notasArchivadas = notas);
   }
+
+  archiveNote(event: { id: number; archivar: boolean }) {
+    this.noteService.archiveNoteById(event.id, event.archivar).subscribe(
+      notaActualizada => {
+        if (event.archivar) {
+          this.notas = this.notas.filter(n => n.noteId !== event.id);
+          this.notasArchivadas.push(notaActualizada);
+        } else {
+          this.notasArchivadas = this.notasArchivadas.filter(n => n.noteId !== event.id);
+          this.notas.push(notaActualizada);
+        }
+      },
+      error => {
+        console.error('Error al archivar/desarchivar la nota:', error);
+      }
+    );
+  }
+
+
+
+
+
+
 }

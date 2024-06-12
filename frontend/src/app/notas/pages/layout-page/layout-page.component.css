@@ -120,3 +120,21 @@ p-dialog {
   align-items: center;
   gap: 10px;
 }
+
+.layout-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+  z-index: 10000; /* Asegúrate de que esté por debajo del p-dialog */
+  display: none; /* Ocultar inicialmente */
+  pointer-events: none; /* No capturar eventos de ratón */
+}
+
+.layout-container.show-dialog {
+  display: block; /* Mostrar cuando el diálogo está visible */
+}
+
+

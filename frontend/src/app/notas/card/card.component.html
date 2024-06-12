@@ -19,9 +19,9 @@
     <p-buttonGroup class="m-2">
       <p-button label="Editar" icon="pi pi-pencil" ></p-button>
       <p-button *ngIf="!nota.archivado" label="Archivar" icon="pi pi-inbox" styleClass="p-button-secondary"
-                (click)="archivar(nota.noteId)"></p-button>
+                (click)="archivar(nota.noteId, true)"></p-button>
       <p-button *ngIf="nota.archivado" label="Desarchivar" icon="pi pi-inbox" styleClass="p-button-secondary"
-                (click)="archivar(nota.noteId)"></p-button>
+                (click)="archivar(nota.noteId, false)"></p-button>
       <p-button  type="button" label="Eliminar Nota" icon="pi pi-trash"
               (click)="onDelete(nota.noteId)">
       </p-button>
