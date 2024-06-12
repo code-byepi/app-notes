@@ -84,6 +84,11 @@ public class NotaServiceImpl implements NotaService{
                 .filter(nota -> nota.getUser().equals(usuario))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Nota> obtenerNotasArchivadasPorUsuario(Long userId) {
+        return notesDao.findByUserUserIdAndArchivado(userId, true);
+    }
 }
 
 

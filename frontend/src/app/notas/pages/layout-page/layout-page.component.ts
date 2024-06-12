@@ -21,6 +21,7 @@ export class LayoutPageComponent implements OnInit {
   public items = [
     { label: 'Listado', icon: 'pi pi-list', url: './list' },
     { label: 'Nueva Nota', icon: 'pi pi-plus', url: './new-note' },
+    { label: 'Archivadas', icon: 'pi pi-inbox', url: './archived' },
   ];
 
   ngOnInit(): void {

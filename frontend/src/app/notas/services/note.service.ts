@@ -20,5 +20,37 @@ export class NoteService {
       }
     });
   }
+  createNote(note: Note): Observable<Note> {
+    const token = localStorage.getItem('token');
+    return this.http.post<Note>(`${this.baseUrl}/notes`, note, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  deleteNoteById(id: number): Observable<void> {
+    const token = localStorage.getItem('token');
+    return this.http.delete<void>(`${this.baseUrl}/delete-notes/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
+
+  archiveNoteById(id: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/notes/${id}/archivar`, {});
+  }
+
+  getArchivedNotes(): Observable<Note[]> {
+    const token = localStorage.getItem('token');
+    return this.http.get<Note[]>(`${this.baseUrl}/notas-archivadas`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
+
 
 }

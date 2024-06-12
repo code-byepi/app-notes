@@ -35,19 +35,25 @@ public class NotaController {
         String email = principal.getName();
         Usuario usuario = usuarioService.getUserByEmail(email);
 
-        if (note.getCategorias() == null || note.getCategorias().isEmpty()) {
-            return ResponseEntity.badRequest().body(null);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
         }
+
+        if (note.getCategorias() == null || note.getCategorias().isEmpty()) {
+            return ResponseEntity.badRequest().body("La nota debe tener al menos una categoría");
+        }
+
         Categoria categoria = note.getCategorias().iterator().next();
 
         if (!categReposity.existsById(categoria.getId())) {
-            return ResponseEntity.badRequest().body(null); // Devolver un error si la categoría no existe
+            return ResponseEntity.badRequest().body("La categoría no existe");
         }
 
         note.setUser(usuario); // Asocia el usuario a la nota
         notaService.addNote(note);
         return ResponseEntity.ok("Se añadió la nota de forma exitosa!");
     }
+
 
     // localhost:8080/notes
     @GetMapping(path = "/notes")
@@ -95,6 +101,20 @@ public class NotaController {
         }
         return ResponseEntity.ok(notas);
     }
+
+    @GetMapping("/notas-archivadas")
+    public ResponseEntity<List<Nota>> obtenerNotasArchivadas(Principal principal) {
+        String emailUsuario = principal.getName();
+        Usuario usuario = usuarioService.getUserByEmail(emailUsuario);
+
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // Usuario no encontrado
+        }
+
+        List<Nota> notasArchivadas = notaService.obtenerNotasArchivadasPorUsuario(usuario.getUserId());
+        return ResponseEntity.ok(notasArchivadas);
+    }
+
 
 
     private ResponseEntity<Map<String, String>> validar(BindingResult result) {

@@ -21,4 +21,6 @@ public interface NotaService {
     Optional<Nota> findById(Long id);
 
     List<Nota> listarPorIdsYUsuario(List<Long> ids, String emailUsuario);
+
+    List<Nota> obtenerNotasArchivadasPorUsuario(Long userId);
 }

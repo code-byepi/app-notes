@@ -4,6 +4,7 @@ import {LayoutPageComponent} from "./pages/layout-page/layout-page.component";
 import {NewPageComponent} from "./pages/new-page/new-page.component";
 import {ListPageComponent} from "./pages/list-page/list-page.component";
 import {NotePageComponent} from "./pages/note-page/note-page.component";
+import {ArchivePageComponent} from "./pages/archive-page/archive-page.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: 'new-note', component: NewPageComponent },
       { path: 'edit/:id', component: NewPageComponent },
       { path: 'list', component: ListPageComponent },
+      { path: 'archived', component: ArchivePageComponent },
       { path: ':id', component: NotePageComponent },
       { path: '**', redirectTo: 'list' },
     ]

@@ -27,4 +27,26 @@ export class ListPageComponent implements OnInit {
       }
     );
   }
+
+  eliminarNota(id: number) {
+    if (confirm('¿Estás seguro de eliminar esta nota?')) {
+      this.noteService.deleteNoteById(id).subscribe(
+        () => {
+          // Eliminar la nota del array local después de eliminarla en el servidor
+          this.notas = this.notas.filter(nota => nota.noteId !== id);
+        },
+        error => {
+          console.log('Error al eliminar la nota:', error);
+        }
+      );
+    }
+  }
+
+  archiveNote(id: number) {
+    this.noteService.archiveNoteById(id).subscribe(() => {
+      this.getNotes();
+    }, error => {
+      console.error('Error al archivar la nota:', error);
+    });
+  }
 }

@@ -6,7 +6,7 @@ export interface Note {
   contenido: string;
   titulo?: string;
   creationTime?: Date;
-  user: User;
+  user?: User;
   archivado: boolean;
-  categorias: Category[];
+  categorias?: Category[];
 }

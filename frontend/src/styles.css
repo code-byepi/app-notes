@@ -2,6 +2,9 @@
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
 
+.spacer {
+  flex: 1 1 auto;
+}
 
 body {
   font-family: var(--font-family), serif;

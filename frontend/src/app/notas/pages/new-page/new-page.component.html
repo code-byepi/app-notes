@@ -1,1 +1,22 @@
-<p>new-page works!</p>
+<div class="p-fluid p-formgrid p-grid">
+  <div class="p-field p-col-12">
+    <h1>Crear Nueva Nota</h1>
+  </div>
+  <form (ngSubmit)="onSubmit()" #noteForm="ngForm">
+    <div class="p-field p-col-12 p-md-6">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" pInputText required [(ngModel)]="nota.titulo" name="titulo" class="p-inputtext p-component" />
+    </div>
+    <div class="p-field p-col-12">
+      <label for="contenido">Contenido</label>
+      <textarea id="contenido" pInputTextarea required [(ngModel)]="nota.contenido" name="contenido" rows="5" cols="30" class="p-inputtextarea p-component"></textarea>
+    </div>
+    <div class="p-field p-col-12">
+      <label for="categoria">Categoría</label>
+      <p-dropdown id="categoria" [options]="categorias" [(ngModel)]="selectedCategoria" optionLabel="nombre" optionValue="id" name="categoria"></p-dropdown>
+    </div>
+    <div class="p-field p-col-12">
+      <button type="submit" pButton label="Crear Nota" class="p-button p-component p-button-primary" [disabled]="!noteForm.form.valid"></button>
+    </div>
+  </form>
+</div>

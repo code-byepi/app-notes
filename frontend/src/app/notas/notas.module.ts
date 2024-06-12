@@ -13,6 +13,12 @@ import {InputTextModule} from "primeng/inputtext";
 import {DialogModule} from "primeng/dialog";
 import {CardModule} from "primeng/card";
 import { CardComponent } from './card/card.component';
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {DropdownModule} from "primeng/dropdown";
+import { ArchivePageComponent } from './pages/archive-page/archive-page.component';
+import {ButtonGroupModule} from "primeng/buttongroup";
+import {ChipModule} from "primeng/chip";
+import {DividerModule} from "primeng/divider";
 
 
 @NgModule({
@@ -21,20 +27,26 @@ import { CardComponent } from './card/card.component';
     ListPageComponent,
     NewPageComponent,
     NotePageComponent,
-    CardComponent
+    CardComponent,
+    ArchivePageComponent
   ],
-    imports: [
-        CommonModule,
-        NotasRoutingModule,
-        ReactiveFormsModule,
-        ToolbarModule,
-        ButtonModule,
-        InputSwitchModule,
-        FormsModule,
-        InputTextModule,
-        DialogModule,
-        CardModule,
-    ]
+  imports: [
+    CommonModule,
+    NotasRoutingModule,
+    ReactiveFormsModule,
+    ToolbarModule,
+    ButtonModule,
+    InputSwitchModule,
+    FormsModule,
+    InputTextModule,
+    DialogModule,
+    CardModule,
+    InputTextareaModule,
+    DropdownModule,
+    ButtonGroupModule,
+    ChipModule,
+    DividerModule,
+  ]
 })
 export class NotasModule {
 
